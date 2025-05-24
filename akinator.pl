@@ -84,3 +84,7 @@ list_games :-
 list_questions :-
     forall(question(Id, Text, Options),
         format("~w|||~w|||~w~n", [Id, Text, Options])).
+
+count_possible_games(Answers, Count) :-
+    possible_games(Answers, Games),
+    length(Games, Count).

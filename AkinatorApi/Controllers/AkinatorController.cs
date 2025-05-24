@@ -293,6 +293,24 @@ namespace AkinatorApi.Controllers
             return Ok(result);
         }
 
+        [HttpPost("count-matches")]
+        public IActionResult CountMatches([FromBody] CountMatchesRequest request)
+        {
+            if (request.Answers == null)
+                return BadRequest("Answers required.");
+
+            string basePath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", ".."));
+            string formattedAnswers = "[" + string.Join(",", request.Answers.Select(a => $"'{a}'")) + "]";
+            string args = $"-q -s akinator.pl -g \"count_possible_games({formattedAnswers}, Count), write(Count), halt.\"";
+
+            string output = RunProlog(args, basePath);
+
+            if (!int.TryParse(output, out int count))
+                return BadRequest("Failed to parse Prolog output.");
+
+            return Ok(new CountMatchesResponse { MatchesCount = count });
+        }
+
 
         private string FormatList(List<string> list)
         {
