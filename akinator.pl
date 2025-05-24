@@ -74,3 +74,13 @@ save_games(File) :-
     forall(game(Name, Answers),
         format(Stream, "game('~w', ~w).~n", [Name, Answers])),
     close(Stream).
+
+% Получить список всех игр
+list_games :-
+    findall(Name, game(Name, _), Games),
+    write(Games).
+
+% Получить список всех вопросов
+list_questions :-
+    forall(question(Id, Text, Options),
+        format("~w|||~w|||~w~n", [Id, Text, Options])).

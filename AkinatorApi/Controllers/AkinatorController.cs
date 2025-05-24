@@ -241,6 +241,57 @@ namespace AkinatorApi.Controllers
 
             return Ok($"Game '{request.NewGameName}' and distinguishing question added successfully.");
         }
+        [HttpGet("games")]
+        public IActionResult GetAllGames()
+        {
+            string basePath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", ".."));
+            string args = "-q -s akinator.pl -g \"list_games, halt.\"";
+            string output = RunProlog(args, basePath);
+
+            var games = output
+                .Trim('[', ']')
+                .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                .Select(g => g.Trim('\'', ' '))
+                .ToList();
+
+            return Ok(games);
+        }
+
+        [HttpGet("questions")]
+        public IActionResult GetAllQuestions()
+        {
+            string basePath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", ".."));
+            string args = "-q -s akinator.pl -g \"list_questions, halt.\"";
+            string output = RunProlog(args, basePath);
+
+            var lines = output.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+            var result = new List<QuestionInfo>();
+
+            foreach (var line in lines)
+            {
+                var parts = line.Split("|||");
+                if (parts.Length == 3)
+                {
+                    if (int.TryParse(parts[0], out int id))
+                    {
+                        var options = parts[2]
+                            .Trim('[', ']')
+                            .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                            .Select(o => o.Trim('\'', ' '))
+                            .ToList();
+
+                        result.Add(new QuestionInfo
+                        {
+                            Id = id,
+                            Text = parts[1].Trim(),
+                            Options = options
+                        });
+                    }
+                }
+            }
+
+            return Ok(result);
+        }
 
 
         private string FormatList(List<string> list)
