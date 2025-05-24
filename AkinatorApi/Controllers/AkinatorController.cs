@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Linq;
 using AkinatorApi.Models;
+using AkinatorApi.Data;
 
 namespace AkinatorApi.Controllers
 {
