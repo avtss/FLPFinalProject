@@ -3,6 +3,7 @@ using AkinatorApi.Models;
 
 namespace AkinatorApi.Data
 {
+
 	public class AkinatorDbContext : DbContext
 	{
 		public AkinatorDbContext(DbContextOptions<AkinatorDbContext> options) : base(options) { }
