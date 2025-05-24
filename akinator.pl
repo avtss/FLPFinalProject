@@ -1,35 +1,31 @@
-:- dynamic game/9.
+:- dynamic game/2.
+:- dynamic question/3.
+
 :- consult('games_db.pl').
+:- consult('questions_db.pl').
 
-% Вопросы
-ask_question(1, 'Is the game an RPG?', ['y', 'n']).
-ask_question(2, 'Is it primarily on PC or consoles?', ['y', 'n']).
-ask_question(3, 'Is the setting fantasy?', ['y', 'n']).
-ask_question(4, 'Is the camera third-person?', ['y', 'n']).
-ask_question(5, 'Does it have multiplayer?', ['y', 'n']).
-ask_question(6, 'Is the graphics style photorealistic?', ['y', 'n']).
-ask_question(7, 'Is it considered difficult?', ['y', 'n']).
-ask_question(8, 'Is it a AAA title?', ['y', 'n']).
+% Возвращает вопрос по номеру
+ask_question(Num, Q, O) :-
+    question(Num, Q, O).
 
-% Проверка префикса (совпадение списков ответов)
+% Проверка, совпадает ли список как префикс
 prefix([], _).
 prefix([H|T], [H2|T2]) :-
     H == H2,
     prefix(T, T2).
 
-% Находим игры, подходящие под текущие ответы
+% Находим подходящие игры
 possible_games(Answers, Games) :-
-    findall(Game, (game(Game, G1,G2,G3,G4,G5,G6,G7,G8),
-                   prefix(Answers, [G1,G2,G3,G4,G5,G6,G7,G8])), Games).
+    findall(Name, (game(Name, FullAnswers),
+                   prefix(Answers, FullAnswers)), Games).
 
-% Возвращаем следующий вопрос с вариантами
+% Возвращает следующий вопрос
 next_question(Answers, Question, Options) :-
     length(Answers, Len),
-    Len < 8,
     NextQ is Len + 1,
     ask_question(NextQ, Question, Options).
 
-% Основной предикат шага: возвращает либо игру, либо вопрос, либо сообщение
+% Основной предикат хода
 next_step(Answers, Response, Done) :-
     possible_games(Answers, Games),
     ( Games = [] ->
@@ -38,23 +34,43 @@ next_step(Answers, Response, Done) :-
     ; Games = [OnlyGame] ->
         Response = game(OnlyGame),
         Done = true
-    ; next_question(Answers, Question, Options) ->
-        Response = question(Question, Options),
+    ; next_question(Answers, Q, O) ->
+        Response = question(Q, O),
         Done = false
     ; Response = multiple_matches,
       Done = true
     ).
 
-% Добавление игры и сохранение базы
-add_and_save_game(Name, G1,G2,G3,G4,G5,G6,G7,G8) :-
-    atom(Name),
-    assertz(game(Name, G1,G2,G3,G4,G5,G6,G7,G8)),
+% Добавление игры
+add_and_save_game(Name, Answers) :-
+    assertz(game(Name, Answers)),
     save_games('games_db.pl').
 
-% Сохранение базы в файл
+% Обновление существующей игры
+update_game(Name, Answers) :-
+    retract(game(Name, _)),
+    assertz(game(Name, Answers)),
+    save_games('games_db.pl').
+
+% Добавление нового вопроса
+add_question(Text, Options) :-
+    findall(_, question(_,_,_), Qs),
+    length(Qs, N),
+    Id is N + 1,
+    assertz(question(Id, Text, Options)),
+    save_questions('questions_db.pl'),
+    write(Id).
+
+% Сохраняем вопросы
+save_questions(File) :-
+    open(File, write, Stream),
+    forall(question(Id, Q, O),
+        format(Stream, "question(~w, '~w', ~w).~n", [Id, Q, O])),
+    close(Stream).
+
+% Сохраняем игры
 save_games(File) :-
     open(File, write, Stream),
-    forall(game(Name,G1,G2,G3,G4,G5,G6,G7,G8),
-           format(Stream, "game('~w', '~w', '~w', '~w', '~w', '~w', '~w', '~w', '~w').~n",
-                  [Name,G1,G2,G3,G4,G5,G6,G7,G8])),
+    forall(game(Name, Answers),
+        format(Stream, "game('~w', ~w).~n", [Name, Answers])),
     close(Stream).

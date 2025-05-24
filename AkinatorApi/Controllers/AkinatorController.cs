@@ -204,6 +204,44 @@ namespace AkinatorApi.Controllers
                 return BadRequest("Unknown session state.");
             }
         }
+        [HttpPost("add-distinguishing-game")]
+        public IActionResult AddDistinguishingGame([FromBody] AddDistinguishingGameRequest request)
+        {
+            if (string.IsNullOrWhiteSpace(request.ExistingGameName) ||
+                string.IsNullOrWhiteSpace(request.NewGameName) ||
+                request.ExistingGameAnswers.Count != request.NewGameAnswers.Count ||
+                request.ExistingGameAnswers.Count == 0 ||
+                string.IsNullOrWhiteSpace(request.NewQuestionText) ||
+                request.NewQuestionOptions.Count == 0)
+            {
+                return BadRequest("Invalid request.");
+            }
+
+            string basePath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", ".."));
+            string qText = request.NewQuestionText.Replace("'", "\\'");
+            string optionsList = "[" + string.Join(",", request.NewQuestionOptions.Select(o => $"'{o}'")) + "]";
+            string addQArgs = $"-q -s akinator.pl -g \"add_question('{qText}', {optionsList}), halt.\"";
+            string questionIdOutput = RunProlog(addQArgs, basePath);
+
+            if (!int.TryParse(questionIdOutput, out _))
+            {
+                return BadRequest($"Failed to add question: Prolog output: {questionIdOutput}");
+            }
+
+            var updatedExisting = request.ExistingGameAnswers.Append(request.ExistingGameAnswer).ToList();
+            var updatedNew = request.NewGameAnswers.Append(request.NewGameAnswer).ToList();
+
+            string formatList(List<string> list) => "[" + string.Join(",", list.Select(a => $"'{a}'")) + "]";
+
+            string updateGameArgs = $"-q -s akinator.pl -g \"update_game('{request.ExistingGameName}', {formatList(updatedExisting)}), halt.\"";
+            RunProlog(updateGameArgs, basePath);
+
+            string addGameArgs = $"-q -s akinator.pl -g \"add_and_save_game('{request.NewGameName}', {formatList(updatedNew)}), halt.\"";
+            RunProlog(addGameArgs, basePath);
+
+            return Ok($"Game '{request.NewGameName}' and distinguishing question added successfully.");
+        }
+
 
         private string FormatList(List<string> list)
         {
