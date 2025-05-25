@@ -296,7 +296,7 @@ namespace AkinatorApi.Controllers
         [HttpPost("count-matches")]
         public IActionResult CountMatches([FromBody] CountMatchesRequest request)
         {
-            if (request.Answers == null)
+            if (request.Answers == null || !request.Answers.Any())
                 return BadRequest("Answers required.");
 
             string basePath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", ".."));
@@ -310,6 +310,7 @@ namespace AkinatorApi.Controllers
 
             return Ok(new CountMatchesResponse { MatchesCount = count });
         }
+
 
 
         private string FormatList(List<string> list)

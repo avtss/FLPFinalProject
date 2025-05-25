@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using AkinatorApi.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace AkinatorApi.Migrations
 {
     [DbContext(typeof(AkinatorDbContext))]
-    partial class AkinatorDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250525121350_FixedSessionAnswersTable_v2")]
+    partial class FixedSessionAnswersTable_v2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

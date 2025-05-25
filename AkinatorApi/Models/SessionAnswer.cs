@@ -5,5 +5,9 @@ public class SessionAnswer
     public GameSession? GameSession { get; set; }
 
     public int QuestionId { get; set; }
-    public bool Answer { get; set; }
+    public string Answer { get; set; }
+
+    public int AddedByUserId { get; set; }  // добавленное поле
+    public User? AddedByUser { get; set; }
+    public DateTime AddedAt { get; set; }
 }
