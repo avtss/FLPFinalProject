@@ -6,6 +6,8 @@ using AkinatorApi.Models;
 using System.Security.Claims; // Для ClaimTypes
 using System.Text.Json;      // Для JsonSerializer
 using AkinatorApi.Data;      // Для AkinatorDbContextdo
+using FSharpAnalytics;
+using Microsoft.Extensions.Configuration;
 
 namespace AkinatorApi.Controllers
 {
@@ -27,8 +29,10 @@ namespace AkinatorApi.Controllers
     [Route("api/[controller]")]
     public class AkinatorController : ControllerBase
     {
+
         private static ConcurrentDictionary<string, SessionData> Sessions = new();
         private readonly AkinatorDbContext _context; // Добавьте поле для контекста
+        private readonly string _connectionString = "Host=localhost;Port=5432;Database=Akinator;Username=postgres;Password=123";
 
         // Добавьте конструктор с внедрением зависимостей
         public AkinatorController(AkinatorDbContext context)
@@ -51,6 +55,32 @@ namespace AkinatorApi.Controllers
             string output = process.StandardOutput.ReadToEnd();
             process.WaitForExit();
             return output.Trim();
+        }
+        [HttpGet("top-active-users")]
+        public IActionResult GetTopActiveUsers()
+        {
+            var rawResult = Queries.getTopActiveUsers(_connectionString);
+            var result = rawResult.Select(tuple => new
+            {
+                username = tuple.Item1,
+                session_count = tuple.Item2
+            }).ToList();
+
+            return Ok(result);
+        }
+
+        [HttpGet("users-with-characters-count")]
+        public IActionResult GetUsersWithCharacterCounts()
+        {
+            var rawResult = Queries.getUsersWithCharacterCounts(_connectionString);
+            var result = rawResult.Select(tuple => new
+            {
+                user_id = tuple.Item1,
+                username = tuple.Item2,
+                characters_added = tuple.Item3
+            }).ToList();
+
+            return Ok(result);
         }
 
         [HttpPost("next")]

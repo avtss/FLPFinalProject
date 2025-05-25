@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\aveti\\PrologFinalProject\\fsharpanalytics\\FSharpAnalytics.fsproj": {}
+    "C:\\Users\\aveti\\PrologFinalProject\\FSharpAnalytics\\FSharpAnalytics.fsproj": {}
   },
   "projects": {
-    "C:\\Users\\aveti\\PrologFinalProject\\fsharpanalytics\\FSharpAnalytics.fsproj": {
+    "C:\\Users\\aveti\\PrologFinalProject\\FSharpAnalytics\\FSharpAnalytics.fsproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\aveti\\PrologFinalProject\\fsharpanalytics\\FSharpAnalytics.fsproj",
+        "projectUniqueName": "C:\\Users\\aveti\\PrologFinalProject\\FSharpAnalytics\\FSharpAnalytics.fsproj",
         "projectName": "FSharpAnalytics",
-        "projectPath": "C:\\Users\\aveti\\PrologFinalProject\\fsharpanalytics\\FSharpAnalytics.fsproj",
+        "projectPath": "C:\\Users\\aveti\\PrologFinalProject\\FSharpAnalytics\\FSharpAnalytics.fsproj",
         "packagesPath": "C:\\Users\\aveti\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\aveti\\PrologFinalProject\\fsharpanalytics\\obj\\",
+        "outputPath": "C:\\Users\\aveti\\PrologFinalProject\\FSharpAnalytics\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
