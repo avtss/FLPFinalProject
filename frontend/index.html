@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Акинатор - Игра</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Акинатор</h1>
+    <button id="start-button">Начать игру</button>
+    <div id="question" style="display: none;">Загрузка вопроса...</div>
+    <div class="btn-group" style="display: none;">
+      <button data-answer="y">Да</button>
+      <button data-answer="n">Нет</button>
+      <button id="restart-button" style="display:none;">Начать заново</button>
+      <input type="text" id="new-object-name" placeholder="Введите имя нового объекта" style="display:none;" />
+      <button id="add-object-button" style="display:none;">Добавить объект</button>
+    </div>
+    <div id="result"></div>
+  </div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
