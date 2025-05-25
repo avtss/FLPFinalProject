@@ -32,7 +32,7 @@ namespace AkinatorApi.Controllers
 
         private static ConcurrentDictionary<string, SessionData> Sessions = new();
         private readonly AkinatorDbContext _context; // Добавьте поле для контекста
-        private readonly string _connectionString = "Host=localhost;Port=5432;Database=Akinator;Username=postgres;Password=123";
+        private readonly string _connectionString = "Host=localhost;Port=5432;Database=Akinator;Username=postgres;Password=12345";
 
         // Добавьте конструктор с внедрением зависимостей
         public AkinatorController(AkinatorDbContext context)
@@ -81,6 +81,31 @@ namespace AkinatorApi.Controllers
             }).ToList();
 
             return Ok(result);
+        }
+
+        [HttpGet("users-with-questions-count")]
+        public IActionResult GetUsersWithQuestionsCount()
+        {
+            var result = Queries.getUsersWithQuestionsCount(_connectionString);
+            // Преобразуем к объектам с нужными именами свойств
+            var response = result.Select(r => new {
+                userId = r.Item1,
+                username = r.Item2,
+                questionsAdded = r.Item3
+            });
+            return Ok(response);
+        }
+
+        [HttpGet("questions-with-authors")]
+        public IActionResult GetQuestionsWithAuthors()
+        {
+            var result = Queries.getQuestionsWithAuthors(_connectionString);
+            var response = result.Select(r => new {
+                questionId = r.Item1,
+                text = r.Item2,
+                addedBy = r.Item3
+            });
+            return Ok(response);
         }
 
         [HttpPost("next")]
