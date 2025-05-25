@@ -36,7 +36,7 @@ game('Genshin Impact', [y,y,y,y,n,y,n,y]).
 game('Destiny 2', [n,y,n,n,y,n,y,y]).
 game('Call of Duty', [n,y,n,y,y,n,y,y]).
 game('Monster Hunter', [y,y,y,y,n,y,y,y]).
-game('No Man\'s Sky', [n,y,n,y,n,y,y,y]).
+game('No Man's Sky', [n,y,n,y,n,y,y,y]).
 game('Rocket League', [n,y,n,n,y,n,y,n]).
 game('Portal', [n,n,n,n,n,y,n,n]).
 game('Among Trees', [n,y,n,n,n,n,n,n]).
@@ -54,7 +54,7 @@ game('The Witcher 2', [y,y,y,y,n,y,n,y]).
 game('Hollow Knight DLC', [n,y,y,n,n,n,y,y]).
 game('Cyberpunk 2077 DLC', [y,y,n,y,n,y,n,y]).
 game('Overwatch 2', [n,y,n,n,y,n,n,y]).
-game('Assassin\'s Creed Valhalla', [y,y,y,y,n,y,y,y]).
+game('Assassin's Creed Valhalla', [y,y,y,y,n,y,y,y]).
 game('Fall Guys', [n,y,n,n,y,n,n,n]).
 game('Valorant', [n,y,n,n,y,n,y,y]).
 game('Ghost of Tsushima', [y,y,y,y,n,y,y,n]).
@@ -78,7 +78,7 @@ game('League of Legends TFT', [n,y,n,n,y,n,n,y]).
 game('Minecraft Modded', [n,y,n,n,y,n,n,n]).
 game('Call of Duty Warzone', [n,y,n,y,y,n,y,y]).
 game('Valorant Episode 3', [n,y,n,n,y,n,y,y]).
-game('Assassin\'s Creed Odyssey', [y,y,y,y,n,y,y,y]).
+game('Assassin's Creed Odyssey', [y,y,y,y,n,y,y,y]).
 game('Battlefield 2042', [n,y,n,y,y,n,y,y]).
 game('Control', [y,n,n,y,n,y,n,y]).
 game('Dead by Daylight', [n,y,n,n,y,n,y,n]).

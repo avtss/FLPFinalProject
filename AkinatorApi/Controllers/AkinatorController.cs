@@ -186,7 +186,7 @@ namespace AkinatorApi.Controllers
                     return BadRequest("Incorrect number of answers to add game.");
 
                 string basePath = System.IO.Path.GetFullPath(System.IO.Path.Combine(AppContext.BaseDirectory, "..", "..", "..", ".."));
-                string formattedAnswers = string.Join(",", allAnswers.ConvertAll(a => $"'{a}'"));
+                string formattedAnswers = "[" + string.Join(",", allAnswers.ConvertAll(a => $"'{a}'")) + "]";
                 string args = $"-q -s akinator.pl -g \"add_and_save_game('{gameName}', {formattedAnswers}), halt.\"";
 
                 RunProlog(args, basePath);

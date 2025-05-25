@@ -3233,19 +3233,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Alexandr\\.nuget\\packages\\": {}
+    "C:\\Users\\aveti\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Alexandr\\Documents\\GitHub\\FLPFinalProject\\AkinatorApi\\AkinatorApi.csproj",
+      "projectUniqueName": "C:\\Users\\aveti\\PrologFinalProject\\akinatorapi\\AkinatorApi.csproj",
       "projectName": "AkinatorApi",
-      "projectPath": "C:\\Users\\Alexandr\\Documents\\GitHub\\FLPFinalProject\\AkinatorApi\\AkinatorApi.csproj",
-      "packagesPath": "C:\\Users\\Alexandr\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Alexandr\\Documents\\GitHub\\FLPFinalProject\\AkinatorApi\\obj\\",
+      "projectPath": "C:\\Users\\aveti\\PrologFinalProject\\akinatorapi\\AkinatorApi.csproj",
+      "packagesPath": "C:\\Users\\aveti\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\aveti\\PrologFinalProject\\akinatorapi\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\Alexandr\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\aveti\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
