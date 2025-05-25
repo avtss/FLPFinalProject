@@ -12,6 +12,7 @@ namespace AkinatorApi.Data
         public DbSet<Character> Characters { get; set; }
         public DbSet<SessionAnswer> SessionAnswers { get; set; }
         public DbSet<QuestionInfo> Questions { get; set; }  // Добавь DbSet для вопросов
+        public DbSet<MatchCountLog> MatchCountLogs { get; set; } = null!; // Добавьте эту строку
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -92,6 +93,22 @@ namespace AkinatorApi.Data
                       .WithMany()
                       .HasForeignKey(q => q.AddedByUserId)
                       .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            modelBuilder.Entity<MatchCountLog>(entity =>
+            {
+                entity.ToTable("match_count_logs");
+                entity.HasKey(m => m.Id);
+                entity.Property(m => m.Id).HasColumnName("id");
+                entity.Property(m => m.UserId).HasColumnName("user_id");
+                entity.Property(m => m.RequestedAt).HasColumnName("requested_at");
+                entity.Property(m => m.AnswersJson).HasColumnName("answers_json");
+                entity.Property(m => m.MatchesCount).HasColumnName("matches_count");
+
+                entity.HasOne(m => m.User)
+                      .WithMany()
+                      .HasForeignKey(m => m.UserId)
+                      .OnDelete(DeleteBehavior.SetNull);
             });
 
             base.OnModelCreating(modelBuilder);

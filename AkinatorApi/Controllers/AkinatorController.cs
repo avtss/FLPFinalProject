@@ -3,6 +3,9 @@ using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Linq;
 using AkinatorApi.Models;
+using System.Security.Claims; // Для ClaimTypes
+using System.Text.Json;      // Для JsonSerializer
+using AkinatorApi.Data;      // Для AkinatorDbContextdo
 
 namespace AkinatorApi.Controllers
 {
@@ -25,7 +28,13 @@ namespace AkinatorApi.Controllers
     public class AkinatorController : ControllerBase
     {
         private static ConcurrentDictionary<string, SessionData> Sessions = new();
+        private readonly AkinatorDbContext _context; // Добавьте поле для контекста
 
+        // Добавьте конструктор с внедрением зависимостей
+        public AkinatorController(AkinatorDbContext context)
+        {
+            _context = context;
+        }
         private string RunProlog(string args, string workingDir)
         {
             var psi = new ProcessStartInfo
@@ -293,8 +302,9 @@ namespace AkinatorApi.Controllers
             return Ok(result);
         }
 
+
         [HttpPost("count-matches")]
-        public IActionResult CountMatches([FromBody] CountMatchesRequest request)
+        public async Task<IActionResult> CountMatches([FromBody] CountMatchesRequest request)
         {
             if (request.Answers == null || !request.Answers.Any())
                 return BadRequest("Answers required.");
@@ -308,10 +318,23 @@ namespace AkinatorApi.Controllers
             if (!int.TryParse(output, out int count))
                 return BadRequest("Failed to parse Prolog output.");
 
+            var log = new MatchCountLog
+            {
+                UserId = User.Identity?.IsAuthenticated == true
+                         ? int.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out var userId)
+                           ? userId
+                           : (int?)null
+                         : null,
+                RequestedAt = DateTime.UtcNow,
+                AnswersJson = JsonSerializer.Serialize(request.Answers ?? new List<string>()),
+                MatchesCount = count
+            };
+
+            _context.MatchCountLogs.Add(log);
+            await _context.SaveChangesAsync();
+
             return Ok(new CountMatchesResponse { MatchesCount = count });
         }
-
-
 
         private string FormatList(List<string> list)
         {
