@@ -56,3 +56,20 @@ module Queries =
             read.int "question_id", 
             read.string "text", 
             read.string "added_by")
+
+    // среднее количество угадываний (matches_count) по пользователям
+    let getUsersWithAverageMatchesCount connStr =
+        Sql.connect connStr
+        |> Sql.query "
+            SELECT
+                u.user_id,
+                u.username,
+                AVG(mcl.matches_count)::int AS avg_matches_count
+            FROM users u
+            JOIN match_count_logs mcl ON u.user_id = mcl.user_id
+            GROUP BY u.user_id, u.username
+            ORDER BY avg_matches_count DESC;"
+        |> Sql.execute (fun read -> 
+            read.int "user_id", 
+            read.string "username", 
+            read.int "avg_matches_count")

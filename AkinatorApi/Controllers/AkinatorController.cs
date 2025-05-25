@@ -108,6 +108,19 @@ namespace AkinatorApi.Controllers
             return Ok(response);
         }
 
+        [HttpGet("users-with-average-matches")]
+        public IActionResult GetUsersWithAverageMatches()
+        {
+            var rawResult = Queries.getUsersWithAverageMatchesCount(_connectionString);
+            var response = rawResult.Select(tuple => new {
+                user_id = tuple.Item1,
+                username = tuple.Item2,
+                avg_matches_count = tuple.Item3
+            });
+            return Ok(response);
+        }
+
+
         [HttpPost("next")]
         public IActionResult NextStep([FromBody] StepRequest request)
         {
