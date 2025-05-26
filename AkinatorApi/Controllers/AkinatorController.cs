@@ -77,7 +77,7 @@ namespace AkinatorApi.Controllers
             {
                 user_id = tuple.Item1,
                 username = tuple.Item2,
-                characters_added = tuple.Item3
+                characters_added = tuple.Item3  // Теперь это количество добавленных игр (AddedGames)
             }).ToList();
 
             return Ok(result);
@@ -86,39 +86,53 @@ namespace AkinatorApi.Controllers
         [HttpGet("users-with-questions-count")]
         public IActionResult GetUsersWithQuestionsCount()
         {
-            var result = Queries.getUsersWithQuestionsCount(_connectionString);
-            // Преобразуем к объектам с нужными именами свойств
-            var response = result.Select(r => new {
-                userId = r.Item1,
+            var rawResult = Queries.getUsersWithQuestionsCount(_connectionString);
+            var response = rawResult.Select(r => new
+            {
+                user_id = r.Item1,
                 username = r.Item2,
-                questionsAdded = r.Item3
-            });
+                questions_added = r.Item3  // Кол-во добавленных вопросов из AddedQuestions
+            }).ToList();
+
             return Ok(response);
         }
 
         [HttpGet("questions-with-authors")]
         public IActionResult GetQuestionsWithAuthors()
         {
-            var result = Queries.getQuestionsWithAuthors(_connectionString);
-            var response = result.Select(r => new {
-                questionId = r.Item1,
+            var rawResult = Queries.getQuestionsWithAuthors(_connectionString);
+            var response = rawResult.Select(r => new
+            {
+                question_id = r.Item1,
                 text = r.Item2,
-                addedBy = r.Item3
-            });
+                added_by = r.Item3  // Имя пользователя, который добавил вопрос
+            }).ToList();
+
             return Ok(response);
         }
 
-        [HttpGet("users-with-average-matches")]
-        public IActionResult GetUsersWithAverageMatches()
+        [HttpGet("popular-answers-by-question")]
+        public IActionResult GetPopularAnswersByQuestion()
         {
-            var rawResult = Queries.getUsersWithAverageMatchesCount(_connectionString);
-            var response = rawResult.Select(tuple => new {
-                user_id = tuple.Item1,
-                username = tuple.Item2,
-                avg_matches_count = tuple.Item3
-            });
+            var result = Queries.getPopularAnswersByQuestion(_connectionString);
+
+            var response = result
+                .GroupBy(r => new { QuestionId = r.Item1, Text = r.Item2 })
+                .Select(g => new
+                {
+                    questionId = g.Key.QuestionId,
+                    text = g.Key.Text,
+                    popularAnswers = g.Select(a => new
+                    {
+                        answer = a.Item3,
+                        count = a.Item4
+                    }).ToList()
+                });
+
             return Ok(response);
         }
+
+
 
 
         [HttpPost("next")]
