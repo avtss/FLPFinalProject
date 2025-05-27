@@ -41,6 +41,10 @@ next_step(Answers, Response, Done) :-
       Done = true
     ).
 
+questions_count(Count) :-
+    findall(_, question(_,_,_), Qs),
+    length(Qs, Count).
+
 % Добавление игры
 add_and_save_game(Name, Answers) :-
     assertz(game(Name, Answers)),

@@ -23,6 +23,7 @@ namespace AkinatorApi.Controllers
         public List<string> AnswersGiven { get; set; } = new();
         public List<string> AnswersToAdd { get; set; } = new();
         public GameState State { get; set; } = GameState.AskingQuestions;
+        public int TotalQuestionsCount { get; set; }
     }
 
     [ApiController]
@@ -134,15 +135,31 @@ namespace AkinatorApi.Controllers
 
 
 
+        private int GetQuestionsCount()
+        {
+            string basePath = System.IO.Path.GetFullPath(System.IO.Path.Combine(AppContext.BaseDirectory, "..", "..", "..", ".."));
+            string args = "-q -s akinator.pl -g \"questions_count(Count), write(Count), halt.\"";
+            string output = RunProlog(args, basePath);
+            if (int.TryParse(output, out int count))
+                return count;
+            else
+                return 8; // fallback на 8, если что-то не так
+        }
 
         [HttpPost("next")]
         public IActionResult NextStep([FromBody] StepRequest request)
         {
             if (string.IsNullOrEmpty(request.SessionId))
+            {
                 request.SessionId = System.Guid.NewGuid().ToString();
+            }
 
             if (!Sessions.ContainsKey(request.SessionId))
-                Sessions[request.SessionId] = new SessionData();
+            {
+                var newSession = new SessionData();
+                newSession.TotalQuestionsCount = GetQuestionsCount();
+                Sessions[request.SessionId] = newSession;
+            }
 
             var session = Sessions[request.SessionId];
 
@@ -164,22 +181,18 @@ namespace AkinatorApi.Controllers
 
                 if (response == "no_match")
                 {
-                    // Начинаем собирать недостающие ответы
                     session.State = GameState.AddingGameQuestions;
 
-                    // Определяем какие вопросы остались
                     int answeredCount = session.AnswersGiven.Count;
-                    int remainingCount = 8 - answeredCount;
+                    int remainingCount = session.TotalQuestionsCount - answeredCount;
 
                     session.AnswersToAdd.Clear();
 
-                    // Возвращаем первый недостающий вопрос
                     if (remainingCount > 0)
                     {
                         string questionText = null;
                         string optionsText = null;
 
-                        // Вызов ask_question для недостающего вопроса
                         int nextQNum = answeredCount + 1;
                         string qArgs = $"-q -s akinator.pl -g \"ask_question({nextQNum}, Q, O), write(Q), write('|||'), write(O), halt.\"";
                         string qOutput = RunProlog(qArgs, basePath);
@@ -199,12 +212,10 @@ namespace AkinatorApi.Controllers
                         {
                             SessionId = request.SessionId,
                             Message = questionText + "," + optionsText,
-                            // Можно добавить отдельное поле для вариантов, если захочешь
                         });
                     }
                     else
                     {
-                        // Неожиданно нет вопросов для добавления
                         return BadRequest("No remaining questions to ask.");
                     }
                 }
@@ -227,9 +238,8 @@ namespace AkinatorApi.Controllers
 
                 int totalAnswers = session.AnswersGiven.Count + session.AnswersToAdd.Count;
 
-                if (totalAnswers < 8)
+                if (totalAnswers < session.TotalQuestionsCount)
                 {
-                    // Возвращаем следующий вопрос из ask_question
                     string questionText = null;
                     string optionsText = null;
 
@@ -273,7 +283,7 @@ namespace AkinatorApi.Controllers
 
                 var allAnswers = session.AnswersGiven.Concat(session.AnswersToAdd).ToList();
 
-                if (allAnswers.Count != 8)
+                if (allAnswers.Count != session.TotalQuestionsCount)
                     return BadRequest("Incorrect number of answers to add game.");
 
                 string basePath = System.IO.Path.GetFullPath(System.IO.Path.Combine(AppContext.BaseDirectory, "..", "..", "..", ".."));
@@ -295,6 +305,7 @@ namespace AkinatorApi.Controllers
                 return BadRequest("Unknown session state.");
             }
         }
+
         [HttpPost("add-distinguishing-game")]
         public IActionResult AddDistinguishingGame([FromBody] AddDistinguishingGameRequest request)
         {

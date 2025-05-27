@@ -1,15 +1,15 @@
 {
   "version": 2,
-  "dgSpecHash": "A7ISEHWZqoo=",
+  "dgSpecHash": "GDJzYwL1HKg=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Alexandr\\Documents\\GitHub\\FLPFinalProject\\FSharpAnalytics\\FSharpAnalytics.fsproj",
+  "projectFilePath": "C:\\Users\\aveti\\FLPFinalProject\\FSharpAnalytics\\FSharpAnalytics.fsproj",
   "expectedPackageFiles": [
-    "C:\\Users\\Alexandr\\.nuget\\packages\\fsharp.core\\9.0.300\\fsharp.core.9.0.300.nupkg.sha512",
-    "C:\\Users\\Alexandr\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\8.0.0\\microsoft.extensions.dependencyinjection.abstractions.8.0.0.nupkg.sha512",
-    "C:\\Users\\Alexandr\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\8.0.0\\microsoft.extensions.logging.abstractions.8.0.0.nupkg.sha512",
-    "C:\\Users\\Alexandr\\.nuget\\packages\\npgsql\\8.0.6\\npgsql.8.0.6.nupkg.sha512",
-    "C:\\Users\\Alexandr\\.nuget\\packages\\npgsql.fsharp\\8.0.0\\npgsql.fsharp.8.0.0.nupkg.sha512",
-    "C:\\Users\\Alexandr\\.nuget\\packages\\system.text.json\\8.0.5\\system.text.json.8.0.5.nupkg.sha512"
+    "C:\\Users\\aveti\\.nuget\\packages\\fsharp.core\\9.0.300\\fsharp.core.9.0.300.nupkg.sha512",
+    "C:\\Users\\aveti\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\8.0.0\\microsoft.extensions.dependencyinjection.abstractions.8.0.0.nupkg.sha512",
+    "C:\\Users\\aveti\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\8.0.0\\microsoft.extensions.logging.abstractions.8.0.0.nupkg.sha512",
+    "C:\\Users\\aveti\\.nuget\\packages\\npgsql\\8.0.6\\npgsql.8.0.6.nupkg.sha512",
+    "C:\\Users\\aveti\\.nuget\\packages\\npgsql.fsharp\\8.0.0\\npgsql.fsharp.8.0.0.nupkg.sha512",
+    "C:\\Users\\aveti\\.nuget\\packages\\system.text.json\\8.0.5\\system.text.json.8.0.5.nupkg.sha512"
   ],
   "logs": []
 }
